@@ -1,0 +1,47 @@
+{
+  "name": "url-shortcut-plugin",
+  "version": "1.0.0",
+  "description": "A keyboard-first Chrome extension for managing URL shortcuts with smart categorization and search",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && node build.js",
+    "preview": "vite preview",
+    "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
+    "lint:fix": "eslint src --ext .js,.jsx,.ts,.tsx --fix",
+    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,css,md}\""
+  },
+  "dependencies": {
+    "date-fns": "^2.30.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "uuid": "^9.0.1",
+    "zustand": "^4.4.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.37",
+    "@types/react-dom": "^18.2.15",
+    "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.4.16",
+    "eslint": "^8.52.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "postcss": "^8.4.31",
+    "prettier": "^3.1.0",
+    "vite": "^7.1.11"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "keywords": [
+    "chrome-extension",
+    "shortcuts",
+    "url-manager",
+    "productivity",
+    "keyboard-navigation"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
+}
