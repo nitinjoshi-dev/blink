@@ -13,14 +13,33 @@ A powerful, keyboard-first Chrome extension for managing URL shortcuts with smar
 - **Undo Support** - 30-second undo window for accidental deletions
 - **Fast Access** - Dashboard view with quick preview of frequently used shortcuts
 
----
 
-## 🚀 Quick Start (10 minutes)
+
+## How to install:
+
+### Download Latest Release OR [Build your own binaries](#-build-your-own-binaries-10-minutes)
+1.  Download the latest fixed version, use the following link:
+    - [Download v1.0.0](https://github.com/nitinjoshi-dev/blink/releases/download/v1.0.0/V1.0.0.zip)
+
+2. Open Chrome Extensions Page: Visit: chrome://extensions
+
+3. Enable Developer Mode: Click toggle in top right
+
+4. Load Unpacked: Click "Load unpacked" button. Select the "dist" folder from this project
+
+5. Pin Extension (optional): Click the extension icon to pin it to your toolbar
+
+#### Shortcut
+To open search:
+    `Cmd + Shift + O` or `Ctrl + Shift + O`
+
+## 🚀 Build your own binaries (10 minutes)
 
 ### Prerequisites
 - **Node.js** 18+
 - **Chrome/Chromium** browser
 - This repository cloned/downloaded
+
 
 ### Installation & Setup
 
