@@ -26,7 +26,7 @@ A powerful, keyboard-first Chrome extension for managing URL shortcuts with smar
 
 ```bash
 # 1. Navigate to project directory
-cd /Users/nitinjoshi/practice/url-plugin
+cd repoFolderPath
 
 # 2. Install dependencies
 npm install
