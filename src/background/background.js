@@ -51,13 +51,16 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
 // Handle global commands
 chrome.commands.onCommand.addListener((command) => {
   if (command === 'open-search') {
+    console.log('Search command triggered');
     // Get current tab
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       if (tabs[0]) {
         const currentTab = tabs[0];
+        console.log('Current tab URL:', currentTab.url);
         
         // Check if we can inject into this tab
         const canInject = canInjectIntoTab(currentTab.url);
+        console.log('Can inject into tab:', canInject);
         
         if (canInject) {
           // Remove overlay from any previously active tab
@@ -72,14 +75,17 @@ chrome.commands.onCommand.addListener((command) => {
             target: { tabId: currentTab.id },
             files: ['search-overlay.js']
           }).then(() => {
+            console.log('Search overlay injected successfully');
             activeOverlayTabId = currentTab.id;
           }).catch((error) => {
             console.error('Error injecting search overlay script:', error);
             // Fallback: open search in new tab
+            console.log('Falling back to new tab');
             openSearchInNewTab();
           });
         } else {
           // Cannot inject - open search in new tab
+          console.log('Cannot inject, opening search in new tab');
           openSearchInNewTab();
         }
       } else {
@@ -107,6 +113,11 @@ function canInjectIntoTab(url) {
     return false;
   }
   
+  // Cannot inject into new tab pages
+  if (url === 'chrome://newtab/' || url === 'about:blank' || url === 'about:newtab') {
+    return false;
+  }
+  
   return true;
 }
 
@@ -114,12 +125,15 @@ function canInjectIntoTab(url) {
 function openSearchInNewTab() {
   try {
     const searchUrl = chrome.runtime.getURL('search.html');
+    console.log('Opening search in new tab:', searchUrl);
     chrome.tabs.create({
       url: searchUrl,
       active: true
     }, (tab) => {
       if (chrome.runtime.lastError) {
         console.error('Error creating search tab:', chrome.runtime.lastError);
+      } else {
+        console.log('Search tab created successfully:', tab.id);
       }
     });
   } catch (error) {

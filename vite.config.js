@@ -21,11 +21,19 @@ export default defineConfig({
         entryFileNames: '[name].js',
         chunkFileNames: '[name].js',
         assetFileNames: '[name].[ext]',
+        manualChunks: (id) => {
+          // Keep search.js as a single chunk to avoid hoisting issues
+          if (id.includes('search')) {
+            return 'search';
+          }
+          return null;
+        },
       },
     },
     outDir: 'dist',
     emptyOutDir: true,
     sourcemap: process.env.NODE_ENV === 'development',
+    minify: false, // Disable minification to avoid hoisting issues
   },
 
   server: {
