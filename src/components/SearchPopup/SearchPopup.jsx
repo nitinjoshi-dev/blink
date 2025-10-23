@@ -85,6 +85,19 @@ const SearchPopup = () => {
     }
   }, [isLoading]);
 
+  // Add global keyboard event listener for better navigation
+  useEffect(() => {
+    const handleGlobalKeyDown = (e) => {
+      // Only handle if the popup is focused
+      if (document.activeElement === inputRef.current || containerRef.current?.contains(document.activeElement)) {
+        handleKeyDown(e);
+      }
+    };
+
+    document.addEventListener('keydown', handleGlobalKeyDown);
+    return () => document.removeEventListener('keydown', handleGlobalKeyDown);
+  }, [filteredShortcuts, selectedIndex]);
+
   // Reset selected index when search results change
   useEffect(() => {
     setSelectedIndex(0);

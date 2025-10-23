@@ -49,6 +49,22 @@ export function useDebouncedSearch(items = [], options = {}) {
 
     const searchText = caseSensitive ? query : query.toLowerCase();
     
+    // Handle folder-specific search (e.g., "work/" or "work/meet")
+    if (searchText.includes('/')) {
+      const [folderPart, aliasPart] = searchText.split('/', 2);
+      const itemFolder = (item.folder || '').toLowerCase();
+      const itemAlias = (item.alias || '').toLowerCase();
+      
+      // If only folder specified (e.g., "work/")
+      if (!aliasPart) {
+        return itemFolder.includes(folderPart);
+      }
+      // If both folder and alias specified (e.g., "work/meet")
+      else {
+        return itemFolder.includes(folderPart) && itemAlias.includes(aliasPart);
+      }
+    }
+    
     return searchFields.some(field => {
       const fieldValue = item[field];
       if (!fieldValue) return false;
@@ -85,18 +101,44 @@ export function useDebouncedSearch(items = [], options = {}) {
     const getMatchScore = (item) => {
       let score = 0;
       
-      searchFields.forEach(field => {
-        const value = getSearchableValue(item, field);
-        const searchableValue = caseSensitive ? value : value.toLowerCase();
+      // Handle folder-specific search scoring
+      if (searchText.includes('/')) {
+        const [folderPart, aliasPart] = searchText.split('/', 2);
+        const itemFolder = (item.folder || '').toLowerCase();
+        const itemAlias = (item.alias || '').toLowerCase();
         
-        if (searchableValue === searchText) {
-          score += 100; // Exact match
-        } else if (searchableValue.startsWith(searchText)) {
-          score += 50; // Starts with
-        } else if (searchableValue.includes(searchText)) {
-          score += 25; // Contains
+        // Exact folder match gets high score
+        if (itemFolder === folderPart) {
+          score += 100;
+        } else if (itemFolder.includes(folderPart)) {
+          score += 50;
         }
-      });
+        
+        // If alias part specified, score it too
+        if (aliasPart) {
+          if (itemAlias === aliasPart) {
+            score += 100;
+          } else if (itemAlias.startsWith(aliasPart)) {
+            score += 75;
+          } else if (itemAlias.includes(aliasPart)) {
+            score += 25;
+          }
+        }
+      } else {
+        // Regular search scoring
+        searchFields.forEach(field => {
+          const value = getSearchableValue(item, field);
+          const searchableValue = caseSensitive ? value : value.toLowerCase();
+          
+          if (searchableValue === searchText) {
+            score += 100; // Exact match
+          } else if (searchableValue.startsWith(searchText)) {
+            score += 50; // Starts with
+          } else if (searchableValue.includes(searchText)) {
+            score += 25; // Contains
+          }
+        });
+      }
       
       return score;
     };

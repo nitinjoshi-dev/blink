@@ -285,12 +285,56 @@ async function loadShortcutsAndSetupEvents(searchInput, resultsContainer, footer
       filteredShortcuts = shortcuts;
     } else {
       filteredShortcuts = shortcuts.filter(shortcut => {
+        // Handle folder-specific search (e.g., "work/" or "work/meet")
+        if (query.includes('/')) {
+          const [folderPart, aliasPart] = query.split('/', 2);
+          const shortcutFolder = (shortcut.folder || '').toLowerCase();
+          const shortcutAlias = (shortcut.alias || '').toLowerCase();
+          
+          // If only folder specified (e.g., "work/")
+          if (!aliasPart) {
+            return shortcutFolder.includes(folderPart);
+          }
+          // If both folder and alias specified (e.g., "work/meet")
+          else {
+            return shortcutFolder.includes(folderPart) && shortcutAlias.includes(aliasPart);
+          }
+        }
+        
+        // Regular search
         const aliasMatch = shortcut.alias.toLowerCase().includes(query);
         const urlMatch = shortcut.url.toLowerCase().includes(query);
         const tagMatch = (shortcut.tags || []).some(tag => tag.toLowerCase().includes(query));
         const folderMatch = (shortcut.folder || '').toLowerCase().includes(query);
         return aliasMatch || urlMatch || tagMatch || folderMatch;
       }).sort((a, b) => {
+        // Enhanced sorting for folder-specific searches
+        if (query.includes('/')) {
+          const [folderPart, aliasPart] = query.split('/', 2);
+          const aFolder = (a.folder || '').toLowerCase();
+          const bFolder = (b.folder || '').toLowerCase();
+          const aAlias = a.alias.toLowerCase();
+          const bAlias = b.alias.toLowerCase();
+          
+          // Prioritize exact folder matches
+          if (aFolder === folderPart && bFolder !== folderPart) return -1;
+          if (bFolder === folderPart && aFolder !== folderPart) return 1;
+          
+          // If both in same folder, sort by alias
+          if (aFolder === bFolder) {
+            if (aliasPart) {
+              if (aAlias === aliasPart && bAlias !== aliasPart) return -1;
+              if (bAlias === aliasPart && aAlias !== aliasPart) return 1;
+              if (aAlias.startsWith(aliasPart) && !bAlias.startsWith(aliasPart)) return -1;
+              if (bAlias.startsWith(aliasPart) && !aAlias.startsWith(aliasPart)) return 1;
+            }
+            return aAlias.localeCompare(bAlias);
+          }
+          
+          return aFolder.localeCompare(bFolder);
+        }
+        
+        // Regular sorting
         const aAlias = a.alias.toLowerCase();
         const bAlias = b.alias.toLowerCase();
         if (aAlias === query && bAlias !== query) return -1;
