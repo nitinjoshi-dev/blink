@@ -19,7 +19,7 @@ A powerful, keyboard-first Chrome extension for managing URL shortcuts with smar
 
 ### Download Latest Release OR [Build your own binaries](#-build-your-own-binaries-10-minutes)
 1.  Download the latest fixed version, use the following link:
-    - [Download v1.0.1](https://github.com/nitinjoshi-dev/blink/releases/download/v1.0.2/V1.0.2.zip)
+    - [Download v1.0.2](https://github.com/nitinjoshi-dev/blink/releases/download/v1.0.2/V1.0.2.zip)
 
 2. Open Chrome Extensions Page: Visit: chrome://extensions
 
